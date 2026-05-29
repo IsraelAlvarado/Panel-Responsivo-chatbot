@@ -1,0 +1,48 @@
+// src/app/rosita/components/loading-indicator/loading-indicator.component.scss
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  transition: all 0.3s;
+}
+
+.loading-container {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loading-spinner {
+  height: 3.5rem;
+  width: 3.5rem;
+  border-radius: 9999px;
+  border: 4px solid #1876d2;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+}
+
+.loading-message {
+  margin-top: 1rem;
+  color: rgb(51 65 85);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

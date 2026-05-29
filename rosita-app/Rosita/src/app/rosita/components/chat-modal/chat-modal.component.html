@@ -1,0 +1,51 @@
+<!-- src/app/rosita/components/chat-modal/chat-modal.component.html -->
+
+<div 
+  *ngIf="visible" 
+  class="modal-overlay"
+  (click)="onOverlayClick($event)">
+  
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <h3 class="modal-title">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="title-icon">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+          </svg>
+          Conversacion
+        </h3>
+        <p class="modal-subtitle" *ngIf="chat">{{ chat.userName }} - {{ chat.userEmail }}</p>
+      </div>
+      <button class="close-button" (click)="onClose()">x</button>
+    </div>
+
+    <div class="messages-area">
+      <div *ngIf="chat" class="messages-list">
+        <div 
+          *ngFor="let message of chat.messages"
+          [ngClass]="message.sender === 'user' ? 'message-user' : 'message-bot'">
+          
+          <div [ngClass]="message.sender === 'user' ? 'bubble-user' : 'bubble-bot'">
+            <p class="message-text">{{ message.text }}</p>
+          </div>
+          <span class="message-timestamp">{{ message.timestamp }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="!chat" class="messages-loading">
+        <div class="loading-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a10 10 0 0 1 7.38 16.75"/>
+            <path d="M12 6v6l4 2"/>
+            <path d="M2.5 8.875a10 10 0 0 0-.5 3"/>
+            <path d="M2.83 16a10 10 0 0 0 2.43 3.4"/>
+            <path d="M4.636 5.235a10 10 0 0 1 .891-.857"/>
+            <path d="M8.644 21.42a10 10 0 0 0 7.631-.38"/>
+          </svg>
+        </div>
+        <p class="loading-text">Cargando mensajes...</p>
+      </div>
+    </div>
+
+  </div>
+</div>

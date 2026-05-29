@@ -1,0 +1,152 @@
+<div class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" *ngIf="visible"
+  (click)="onBackdropClick($event)">
+  <div class="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+
+    <div class="bg-[#1876d2] p-6 flex justify-between items-center">
+      <h2 class="text-2xl font-bold text-white">Plantillas de Notificaciones OneSignal</h2>
+      <button (click)="onClose()" class="text-white hover:text-gray-200 text-2xl">×</button>
+    </div>
+
+    <div class="flex-1 overflow-hidden flex">
+
+      <div class="w-1/3 border-r p-4 overflow-y-auto bg-gray-50" *ngIf="!showForm">
+        <button (click)="onNew()"
+          class="w-full bg-indigo-600 text-white p-3 rounded-lg mb-4 font-bold hover:bg-indigo-700">
+          + Nuevo Template
+        </button>
+
+        <div class="relative mb-4">
+          <input type="text" placeholder="Buscar templates..." class="w-full border p-3 rounded-lg pl-10"
+            (input)="onSearch($event)">
+          <span class="absolute left-3 top-3 text-gray-400">Q</span>
+        </div>
+
+        <div *ngIf="templates.length === 0" class="text-center text-gray-500 py-8">
+          No hay templates. Crea uno nuevo.
+        </div>
+
+        <div *ngFor="let template of templates" (click)="onSelect(template)"
+          class="p-4 border rounded-lg mb-2 cursor-pointer hover:bg-white transition-colors"
+          [class.bg-white]="selectedTemplate?.id === template.id"
+          [class.border-indigo-500]="selectedTemplate?.id === template.id"
+          [class.shadow-sm]="selectedTemplate?.id === template.id">
+          <div class="font-bold text-slate-800 truncate">{{ template.name }}</div>
+          <div class="text-xs text-gray-400 mt-1 font-mono truncate">{{ template.id }}</div>
+        </div>
+      </div>
+
+      <div class="flex-1 p-6 overflow-y-auto bg-white">
+
+        <div *ngIf="!selectedTemplate && !showForm"
+          class="flex flex-col items-center justify-center text-gray-400 mt-20">
+          <div class="text-6xl mb-4 flex justify-center">
+            <svg width="64px" height="64px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M11.5 0.999992C10.9477 0.999992 10.5 1.44771 10.5 1.99999V2.99999H9.99998C7.23864 2.99999 4.99998 5.23824 4.99998 7.99975V11C4.99998 11.7377 4.76718 12.5722 4.39739 13.4148C4.03164 14.2482 3.55875 15.0294 3.14142 15.6439C2.38188 16.7624 2.85215 18.5301 4.40564 18.8103C5.42144 18.9935 6.85701 19.2115 8.54656 19.3527C8.54454 19.4015 8.54352 19.4506 8.54352 19.5C8.54352 21.433 10.1105 23 12.0435 23C13.9765 23 15.5435 21.433 15.5435 19.5C15.5435 19.4482 15.5424 19.3966 15.5402 19.3453C17.1921 19.204 18.596 18.9903 19.5943 18.8103C21.1478 18.5301 21.6181 16.7624 20.8586 15.6439C20.4412 15.0294 19.9683 14.2482 19.6026 13.4148C19.2328 12.5722 19 11.7377 19 11V7.99975C19 5.23824 16.7613 2.99999 14 2.99999H13.5V1.99999C13.5 1.44771 13.0523 0.999992 12.5 0.999992H11.5ZM12 19.5C12.5113 19.5 13.0122 19.4898 13.4997 19.4715C13.5076 20.2758 12.8541 20.9565 12.0435 20.9565C11.2347 20.9565 10.5803 20.2778 10.5872 19.4746C11.0473 19.491 11.5191 19.5 12 19.5ZM9.99998 4.99999C8.34305 4.99999 6.99998 6.34297 6.99998 7.99975V11C6.99998 12.1234 6.65547 13.2463 6.22878 14.2186C5.79804 15.2 5.25528 16.0911 4.79599 16.7675C4.78578 16.7825 4.78102 16.7969 4.77941 16.8113C4.77797 16.8242 4.77919 16.8362 4.78167 16.8458C6.3644 17.1303 9.00044 17.5 12 17.5C14.9995 17.5 17.6356 17.1303 19.2183 16.8458C19.2208 16.8362 19.222 16.8242 19.2206 16.8113C19.2189 16.7969 19.2142 16.7825 19.204 16.7675C18.7447 16.0911 18.2019 15.2 17.7712 14.2186C17.3445 13.2463 17 12.1234 17 11V7.99975C17 6.34297 15.6569 4.99999 14 4.99999H9.99998Z"
+                  fill="#0F0F0F"></path>
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M16.0299 0.757457C16.1622 0.228068 16.7146 -0.102469 17.2437 0.0301341C17.3131 0.0476089 17.3789 0.0669732 17.4916 0.104886C17.6295 0.151258 17.8183 0.221479 18.0424 0.322098C18.4894 0.522794 19.0851 0.848127 19.6982 1.35306C20.9431 2.37831 22.2161 4.1113 22.495 6.9005C22.55 7.45005 22.149 7.94009 21.5995 7.99504C21.05 8.05 20.5599 7.64905 20.505 7.09951C20.2839 4.88869 19.3068 3.62168 18.4268 2.89692C17.9774 2.52686 17.5418 2.28969 17.2232 2.14664C17.0645 2.07538 16.9369 2.02841 16.8541 2.00057C16.8201 1.98913 16.7859 1.97833 16.7513 1.96858C16.2192 1.83203 15.8964 1.2912 16.0299 0.757457Z"
+                  fill="#0F0F0F"></path>
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M7.97014 0.757457C7.83619 0.221662 7.29326 -0.104099 6.75746 0.0298498C6.68765 0.0473468 6.62176 0.066766 6.5084 0.104885C6.37051 0.151257 6.1817 0.221478 5.9576 0.322097C5.51059 0.522793 4.91493 0.848125 4.30179 1.35306C3.05685 2.37831 1.78388 4.1113 1.50496 6.90049C1.45001 7.45003 1.85095 7.94008 2.40049 7.99503C2.95004 8.04998 3.44008 7.64904 3.49504 7.0995C3.71612 4.88869 4.69315 3.62168 5.57321 2.89692C6.02257 2.52686 6.45815 2.28969 6.77678 2.14664C6.93548 2.07538 7.06308 2.02841 7.14589 2.00057C7.17991 1.98913 7.21413 1.97833 7.24867 1.96858C7.78081 1.83203 8.10358 1.2912 7.97014 0.757457Z"
+                  fill="#0F0F0F"></path>
+              </g>
+            </svg>
+          </div>
+
+          <p class="text-lg text-center">Selecciona un template o crea uno nuevo</p>
+        </div>
+
+        <form *ngIf="showForm && selectedTemplate" (ngSubmit)="onSave()" class="max-w-lg mx-auto">
+          <h3 class="text-2xl font-bold mb-6 text-slate-800">
+            {{ isEditing ? 'Editar Template' : 'Nuevo Template' }}
+          </h3>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block font-bold mb-2 text-slate-700">Nombre del Template *</label>
+              <input type="text" [ngModel]="selectedTemplate.name" (ngModelChange)="onFieldChange('name', $event)"
+                name="name"
+                class="w-full border-2 border-slate-200 p-3 rounded-lg focus:border-indigo-500 focus:outline-none"
+                placeholder="Ej: notificacion_bienvenida" required>
+              <div class="text-xs text-gray-500 mt-1">Identificador legible (no el UUID)</div>
+            </div>
+
+            <div>
+              <label class="block font-bold mb-2 text-slate-700">Titulo *</label>
+              <input type="text" [ngModel]="selectedTemplate.titulo" (ngModelChange)="onFieldChange('titulo', $event)"
+                name="titulo"
+                class="w-full border-2 border-slate-200 p-3 rounded-lg focus:border-indigo-500 focus:outline-none"
+                placeholder="Ej: Bienvenido a nuestra parroquia!" required>
+            </div>
+
+            <div>
+              <label class="block font-bold mb-2 text-slate-700">Mensaje *</label>
+              <textarea [ngModel]="selectedTemplate.mensaje" (ngModelChange)="onFieldChange('mensaje', $event)"
+                name="mensaje" rows="4"
+                class="w-full border-2 border-slate-200 p-3 rounded-lg focus:border-indigo-500 focus:outline-none"
+                placeholder="Escribe el contenido de la notificacion..." required></textarea>
+              <div class="text-xs text-gray-500 mt-1 text-right">
+                {{ selectedTemplate.mensaje?.length || 0 }} caracteres
+              </div>
+            </div>
+          </div>
+
+          <div class="flex gap-3 mt-8">
+            <button type="submit" [disabled]="loading"
+              class="flex-1 bg-indigo-600 text-white p-4 rounded-xl font-bold hover:bg-indigo-700 disabled:bg-gray-400 transition-colors">
+              {{ loading ? 'Guardando...' : (isEditing ? 'Actualizar Template' : 'Crear Template') }}
+            </button>
+            <button type="button" (click)="onCloseForm()"
+              class="px-6 py-4 border-2 border-slate-200 rounded-xl font-bold hover:bg-slate-50 transition-colors">
+              Cancelar
+            </button>
+          </div>
+        </form>
+
+        <div *ngIf="!showForm && selectedTemplate" class="max-w-lg mx-auto space-y-6">
+
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="text-sm text-gray-500 uppercase tracking-wide">Template Name</div>
+              <h3 class="text-2xl font-bold text-slate-800">{{ selectedTemplate.name }}</h3>
+              <div class="text-xs text-gray-400 font-mono mt-1">ID: {{ selectedTemplate.id }}</div>
+            </div>
+            <div class="flex gap-2">
+              <button (click)="onEdit(selectedTemplate)"
+                class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700 transition-colors">
+                EDITAR
+              </button>
+              <button (click)="onSendNow()"
+                class="bg-green-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-green-700 transition-colors">
+                ENVIAR
+              </button>
+              <button (click)="onDelete()"
+                class="bg-red-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-red-700 transition-colors">
+                ELIMINAR
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-amber-50 p-4 rounded-xl border border-amber-200">
+            <div class="text-sm text-amber-800">
+              <span class="font-bold">Nota:</span>
+              Los templates creados aqui se guardan en OneSignal.
+              <br>
+              Su chatbot usara los Template Name para buscar el id del template y asi enviar la notificacion
+              <br>
+              Mantener el nombre de Inscripciones como esta.
+              <br>
+              Puede crear nuevos Template y usarlos para enviar notificaciones a todos los que esten suscritos al chatbot.
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

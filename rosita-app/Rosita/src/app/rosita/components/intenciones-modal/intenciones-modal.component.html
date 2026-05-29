@@ -1,0 +1,289 @@
+<!-- src/app/rosita/components/intenciones-modal/intenciones-modal.component.html -->
+<div *ngIf="visible" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+  (click)="onClose()">
+
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col"
+    (click)="$event.stopPropagation()">
+
+    <div class="bg-gradient-to-r bg-[#1876d2] to-purple-600 px-6 py-5 flex justify-between items-center shrink-0">
+      <div class="flex items-center gap-4">
+        <div class="bg-white/20 p-2.5 rounded-xl">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="w-7 h-7 text-white">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+          </svg>
+        </div>
+        <div>
+          <h2 class="text-xl font-black text-white tracking-tight">Intenciones de Misa</h2>
+          <p class="text-indigo-100 text-xs font-medium">Gestionar solicitudes de intenciones</p>
+        </div>
+      </div>
+      <button (click)="onClose()"
+        class="text-white/70 hover:text-white hover:bg-white/10 p-2 rounded-xl transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+          class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="flex-1 overflow-auto p-6">
+
+      <div *ngIf="estadisticas" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+          <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Total</div>
+          <div class="text-2xl font-black text-slate-800">{{ estadisticas.total }}</div>
+        </div>
+        <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-100">
+          <div class="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-1">Emitidas</div>
+          <div class="text-2xl font-black text-emerald-700">{{ estadisticas.emitidas }}</div>
+        </div>
+        <div class="bg-amber-50 rounded-xl p-4 border border-amber-100">
+          <div class="text-xs font-bold text-amber-600 uppercase tracking-wider mb-1">No Emitidas</div>
+          <div class="text-2xl font-black text-amber-700">{{ estadisticas.noEmitidas }}</div>
+        </div>
+        <div class="bg-indigo-50 rounded-xl p-4 border border-indigo-100">
+          <div class="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-1">Valor Total</div>
+          <div class="text-2xl font-black text-indigo-700">{{ formatCurrency(estadisticas.valorTotal) }}</div>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4 mb-6">
+        <div class="flex-1 relative">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+          </svg>
+          <input type="text" placeholder="Buscar por persona, motivo o detalle..."
+            class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            (input)="onSearch($event)" />
+        </div>
+
+        <select (change)="onFilterByEstado($any($event.target).value)"
+          class="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <option value="all">Todos los estados</option>
+          <option value="EMITIDO">EMITIDO</option>
+          <option value="NO_EMITIDO">NO EMITIDO</option>
+        </select>
+
+        <button (click)="onNewIntencion()"
+          class="px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+            class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+          Nueva Intencion
+        </button>
+      </div>
+
+      <div *ngIf="loading" class="flex justify-center py-12">
+        <div class="animate-spin rounded-full h-10 w-10 border-4 border-indigo-200 border-t-indigo-600"></div>
+      </div>
+
+      <div *ngIf="!loading && intenciones.length === 0" class="text-center py-12">
+        <div class="bg-slate-50 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="w-10 h-10 text-slate-300">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+          </svg>
+        </div>
+        <p class="text-slate-500 font-medium">No hay intenciones registradas</p>
+      </div>
+
+      <div *ngIf="!loading && intenciones.length > 0" class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b border-slate-200">
+              <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Fecha Misa</th>
+              <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Horario</th>
+              <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Motivo</th>
+              <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Ofrece</th>
+              <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Detalle</th>
+              <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Ofrenda</th>
+              <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Estado</th>
+              <th class="text-right py-3 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let intencion of intenciones"
+              class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+              <td class="py-4 px-4">
+                <div class="font-semibold text-slate-800">{{ formatDate(intencion.fechaMisa) }}</div>
+              </td>
+              <td class="py-4 px-4">
+                <span
+                  class="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                  {{ getHorarioDescripcion(intencion.horarioMisa) }}
+                </span>
+              </td>
+              <td class="py-4 px-4">
+                <span class="font-medium text-slate-700">{{ getMotivoDescripcion(intencion.motivoMisa) }}</span>
+              </td>
+              <td class="py-4 px-4">
+                <div class="font-semibold text-slate-800">{{ intencion.personaOfrece }}</div>
+              </td>
+              <td class="py-4 px-4">
+                <div class="text-sm text-slate-600 max-w-xs truncate" [title]="intencion.detalleMisa">
+                  {{ intencion.detalleMisa || '-' }}
+                </div>
+              </td>
+              <td class="py-4 px-4">
+                <span class="font-semibold text-slate-800">{{ formatCurrency(intencion.valor) }}</span>
+              </td>
+              <td class="py-4 px-4">
+                <select [value]="intencion.estado"
+                  (change)="onUpdateEstado(intencion.intencionId, $any($event.target).value)"
+                  class="px-3 py-1.5 text-xs font-semibold rounded-lg border-2 cursor-pointer transition-all"
+                  [ngClass]="getEstadoClass(intencion.estado)">
+                  <option value="EMITIDO">EMITIDO</option>
+                  <option value="NO_EMITIDO">NO EMITIDO</option>
+                </select>
+              </td>
+              <td class="py-4 px-4">
+                <div class="flex justify-end gap-2">
+                  <button (click)="onEditIntencion(intencion)"
+                    class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"
+                    title="Editar">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                      stroke="currentColor" class="w-5 h-5">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                    </svg>
+                  </button>
+                  <button (click)="onDeleteIntencion(intencion.intencionId)"
+                    class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                    title="Eliminar">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                      stroke="currentColor" class="w-5 h-5">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="border-t border-slate-200 px-6 py-4 flex justify-between items-center shrink-0 bg-slate-50">
+      <div class="text-sm text-slate-500">
+        Mostrando <span class="font-semibold text-slate-700">{{ intenciones.length }}</span> intenciones
+      </div>
+      <button (click)="onExport('json')"
+        class="px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-medium rounded-lg transition-all flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+        </svg>
+        Exportar JSON
+      </button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="facade.showForm"
+  class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4"
+  (click)="onCloseForm()">
+
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden" (click)="$event.stopPropagation()">
+
+    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4 flex justify-between items-center">
+      <h3 class="text-lg font-black text-white">
+        {{ (selectedIntencion?.intencionId) ? 'Editar Intencion' : 'Nueva Intencion' }}
+      </h3>
+      <button (click)="onCloseForm()"
+        class="text-white/70 hover:text-white hover:bg-white/10 p-2 rounded-xl transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+          class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="p-6 space-y-5" *ngIf="selectedIntencion">
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Fecha de la Misa *</label>
+          <input type="date" [(ngModel)]="selectedIntencion.fechaMisa"
+            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Horario *</label>
+          <select [(ngModel)]="selectedIntencion.horarioMisa"
+            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option *ngFor="let horario of facade.horariosMisa" [value]="horario.codigo">
+              {{ horario.descripcion }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Motivo de la Misa *</label>
+        <select [(ngModel)]="selectedIntencion.motivoMisa"
+          class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <option *ngFor="let motivo of facade.motivosMisa" [value]="motivo.codigo">
+            {{ motivo.descripcion }}
+          </option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Persona que Ofrece *</label>
+        <input type="text" [(ngModel)]="selectedIntencion.personaOfrece" placeholder="Nombre completo"
+          class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Detalle / Intencion</label>
+        <textarea [(ngModel)]="selectedIntencion.detalleMisa" rows="3" placeholder="Describa la intencion especifica..."
+          class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"></textarea>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Ofrenda</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-medium">$</span>
+          <input type="number" [(ngModel)]="selectedIntencion.valor" placeholder="0"
+            class="w-full pl-8 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Estado</label>
+        <select [(ngModel)]="selectedIntencion.estado"
+          class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <option value="EMITIDO">EMITIDO</option>
+          <option value="NO_EMITIDO">NO EMITIDO</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="border-t border-slate-200 px-6 py-4 flex justify-end gap-3">
+      <button (click)="onCloseForm()"
+        class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition-all">
+        Cancelar
+      </button>
+      <button (click)="onSaveIntencion()"
+        class="px-5 py-2.5 bg-[#1876d2] text-white font-semibold rounded-xl transition-all flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+          class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+        </svg>
+        Guardar Intencion
+      </button>
+    </div>
+  </div>
+</div>

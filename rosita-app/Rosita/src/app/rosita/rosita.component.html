@@ -1,0 +1,256 @@
+<app-rosita-header></app-rosita-header>
+
+<app-rosita-navigation [currentTab]="currentTab" (tabChange)="onTabChange($event)">
+</app-rosita-navigation>
+
+<app-loading-indicator [visible]="chatsFacade.loading || dashboardFacade.stats === null"
+  [message]="'Sincronizando...'">
+</app-loading-indicator>
+
+<main class="p-4 sm:p-8 bg-slate-50 min-h-screen">
+
+  <div *ngIf="currentTab === 'dashboard'">
+  <app-dashboard 
+  [stats]="dashboardFacade.stats" 
+  [weeklyActivity]="dashboardFacade.weeklyActivity"
+  [topConsultations]="dashboardFacade.topConsultations"
+  [analyzingConsultations]="dashboardFacade.analyzingConsultations"
+  [analysisProgress]="dashboardFacade.analysisProgress"
+  [lastSync]="dashboardFacade.lastSync"
+  (exportData)="onExportData($event)">
+</app-dashboard>
+  </div>
+
+  <div *ngIf="currentTab === 'chats'">
+    <app-chats-list [chats]="chatsFacade.filteredChats" [loading]="chatsFacade.loading"
+      (chatClick)="onChatClick($event)" (filterChange)="onFilterChange($event)" (searchChange)="onSearchChange($event)"
+      (deleteChat)="onDeleteChat($event)">
+    </app-chats-list>
+  </div>
+
+  <div *ngIf="currentTab === 'config'" class="tab-content max-w-2xl mx-auto animate-fade-in">
+    <div class="bg-white rounded-2xl shadow-sm p-10 border border-slate-100">
+
+      <div class="h-px bg-slate-100 mb-10"></div>
+
+      <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest mb-6">Mantenimiento Avanzado</h3>
+
+      <div class="space-y-4">
+        <button
+          class="w-full text-left p-6 border-2 border-slate-50 rounded-2xl hover:bg-slate-50 hover:border-slate-200 transition-all group flex justify-between items-center"
+          (click)="openFaqCrud()">
+          <div>
+            <div class="font-black text-slate-800 flex items-center gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 12h6M9 16h6M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" />
+              </svg>
+              Gestionar FAQ
+            </div>
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+              Crear - Editar - Eliminar - Consultar Preguntas Frecuentes
+            </div>
+          </div>
+          <span class="text-xl group-hover:translate-x-1 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+          </span>
+        </button>
+
+        <button
+          class="w-full text-left p-6 border-2 border-slate-50 rounded-2xl hover:bg-slate-50 hover:border-slate-200 transition-all group flex justify-between items-center"
+          (click)="openGruposCrud()">
+          <div>
+            <div class="font-black text-slate-800 flex items-center gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+              </svg>
+              Gestionar Grupos Parroquiales
+            </div>
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+              Legion de Maria - Coro - Catequesis - Matrimonios
+            </div>
+          </div>
+          <span class="text-xl group-hover:translate-x-1 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+          </span>
+        </button>
+        <button
+          class="w-full text-left p-6 border-2 border-slate-50 rounded-2xl hover:bg-slate-50 hover:border-slate-200 transition-all group flex justify-between items-center"
+          (click)="openEventosCrud()">
+          <div>
+            <div class="font-black text-slate-800 flex items-center gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+              </svg>
+              Gestionar Eventos Parroquiales
+            </div>
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+              Misas - Retiros - Convivencias - Celebraciones - Talleres
+            </div>
+          </div>
+          <span class="text-xl group-hover:translate-x-1 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+          </span>
+        </button>
+        <button
+          class="w-full text-left p-6 border-2 border-slate-50 rounded-2xl hover:bg-slate-50 hover:border-slate-200 transition-all group flex justify-between items-center"
+          (click)="openInscripcionesCrud()">
+          <div>
+            <div class="font-black text-slate-800 flex items-center gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+              </svg>
+              Ver Inscripciones
+            </div>
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+              Gestionar - Aprobar - Revisar Solicitudes
+            </div>
+          </div>
+          <span class="text-xl group-hover:translate-x-1 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+          </span>
+        </button>
+
+        <button
+          class="w-full text-left p-6 border-2 border-slate-50 rounded-2xl hover:bg-slate-50 hover:border-slate-200 transition-all group flex justify-between items-center"
+          (click)="openIntencionesCrud()">
+          <div>
+            <div class="font-black text-slate-800 flex items-center gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+              </svg>
+              Gestionar Intenciones de Misa
+            </div>
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+              Difuntos - Accion de Gracias - Salud - Cumpleanos - Aniversarios
+            </div>
+          </div>
+          <span class="text-xl group-hover:translate-x-1 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+          </span>
+        </button>
+
+        <button
+          class="w-full text-left p-6 border-2 border-slate-50 rounded-2xl hover:bg-slate-50 hover:border-slate-200 transition-all group flex justify-between items-center"
+          (click)="openPushNotificationsCrud()">
+          <div>
+            <div class="font-black text-slate-800 flex items-center gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+              </svg>
+              Editar Notificaciones
+            </div>
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+              Configurar plantillas de notificaciones push
+            </div>
+          </div>
+          <span class="text-xl group-hover:translate-x-1 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer
+  class="bg-slate-100 text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] py-8 text-center border-t border-slate-200">
+  2025 Parroquia - Administracion Rosita - Todos los derechos reservados
+</footer>
+
+<app-chat-modal [visible]="chatsFacade.showModal" [chat]="chatsFacade.selectedChat" (close)="onModalClose()">
+</app-chat-modal>
+
+<app-faq-modal [visible]="faqFacade.showModal" [faqs]="faqFacade.faqs" [loading]="faqFacade.loading"
+  [selectedFaq]="faqFacade.selectedFaq" (close)="closeFaqCrud()" (newFaq)="newFaq()" (editFaq)="editFaq($event)"
+  (deleteFaq)="deleteFaq($event)" (saveFaq)="saveFaq()" (closeForm)="faqFacade.closeForm()">
+</app-faq-modal>
+
+
+
+<app-grupos-modal [visible]="gruposFacade.showModal" [grupos]="gruposFacade.grupos"
+  [loading]="gruposFacade.loading" [selectedGrupo]="gruposFacade.selectedGrupo" (close)="closeGruposCrud()"
+  (newGrupo)="newGrupo()" (editGrupo)="editGrupo($event)" (deleteGrupo)="deleteGrupo($event)" (saveGrupo)="saveGrupo()"
+  (closeForm)="gruposFacade.closeForm()" (viewInscripciones)="viewInscripcionesGrupo($event)">
+</app-grupos-modal>
+
+<app-eventos-modal 
+  [visible]="eventosFacade.showModal" 
+  [eventos]="eventosFacade.filteredEventos"
+  [loading]="eventosFacade.loading" 
+  [selectedEvento]="eventosFacade.selectedEvento"
+  [estadisticas]="eventosFacade.estadisticas" 
+  [tiposEvento]="eventosFacade.tiposEvento"
+  [estadosEvento]="eventosFacade.estadosEvento"
+  [parroquias]="eventosFacade.parroquias"
+  (close)="closeEventosCrud()" 
+  (newEvento)="newEvento()"
+  (editEvento)="editEvento($event)" 
+  (deleteEvento)="deleteEvento($event)" 
+  (saveEvento)="saveEvento()"
+  (closeForm)="eventosFacade.closeForm()" 
+  (updateEstado)="updateEstadoEvento($event.id, $event.estado)"
+  (filterByEstado)="filterEventosByEstado($event)" 
+  (filterByTipo)="filterEventosByTipo($event)"
+  (search)="searchEventos($event)">
+</app-eventos-modal>
+
+<app-inscripciones-modal [visible]="inscripcionesFacade.showModal"
+  [inscripciones]="inscripcionesFacade.filteredInscripciones" [loading]="inscripcionesFacade.loading"
+  [selectedInscripcion]="inscripcionesFacade.selectedInscripcion" [grupos]="gruposFacade.grupos"
+  [estadisticas]="inscripcionesFacade.estadisticas" [grupoSeleccionado]="inscripcionesFacade.grupoSeleccionadoId"
+  (close)="closeInscripcionesCrud()" (newInscripcion)="newInscripcion()" (viewInscripcion)="viewInscripcion($event)"
+  (editInscripcion)="onEditInscripcion($event)" (deleteInscripcion)="deleteInscripcion($event)"
+  (saveInscripcion)="saveInscripcion()" (closeForm)="inscripcionesFacade.closeForm()"
+  (updateEstado)="updateEstadoInscripcion($event.id, $event.estado)"
+  (filterByEstado)="filterInscripcionesByEstado($event)" (search)="searchInscripciones($any($event).target.value)"
+  (export)="exportInscripciones($event)">
+</app-inscripciones-modal>
+
+<app-intenciones-modal [visible]="intencionesFacade.showModal" [intenciones]="intencionesFacade.filteredIntenciones"
+  [loading]="intencionesFacade.loading" [selectedIntencion]="intencionesFacade.selectedIntencion"
+  [estadisticas]="intencionesFacade.estadisticas" (close)="closeIntencionesCrud()" (newIntencion)="newIntencion()"
+  (editIntencion)="editIntencion($event)" (deleteIntencion)="deleteIntencion($event)" (saveIntencion)="saveIntencion()"
+  (closeForm)="intencionesFacade.closeForm()" (updateEstado)="updateEstadoIntencion($event.id, $event.estado)"
+  (filterByEstado)="filterIntencionesByEstado($event)" (search)="searchIntenciones($any($event).target.value)"
+  (export)="exportIntenciones($event)">
+</app-intenciones-modal>
+
+<app-push-notifications-modal [visible]="notificacionesFacade.showModal" [loading]="notificacionesFacade.loading"
+  [templates]="notificacionesFacade.templatesFiltrados" [selectedTemplate]="notificacionesFacade.selectedTemplate"
+  [showForm]="notificacionesFacade.showForm" [isEditing]="notificacionesFacade.isEditing"
+  (close)="closePushNotificationsCrud()" (newTemplate)="notificacionesFacade.createTemplate()"
+  (editTemplate)="onEditNotification($event)" (selectTemplate)="onNotificationSelect($event)"
+  (saveTemplate)="onSaveNotification()" (deleteTemplate)="onDeleteNotification($event)"
+  (sendTemplate)="onSendNotification($event)" (closeForm)="notificacionesFacade.closeForm()"
+  (fieldChange)="onNotificationFieldChange($event)" (searchChange)="notificacionesFacade.searchTemplates($event)">
+</app-push-notifications-modal>

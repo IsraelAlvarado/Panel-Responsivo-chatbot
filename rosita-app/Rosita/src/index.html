@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <title>Rosita - Panel de Administracion</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script>
+    (function() {
+      const keysToRemove = [];
+      
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (
+          key.startsWith('bp') ||
+          key.startsWith('botpress') ||
+          key.includes('webchat')
+        )) {
+          keysToRemove.push(key);
+        }
+      }
+      
+      keysToRemove.forEach(key => {
+        localStorage.removeItem(key);
+      });
+
+      const sessionKeys = [];
+      for (let i = 0; i < sessionStorage.length; i++) {
+        const key = sessionStorage.key(i);
+        if (key && (
+          key.startsWith('bp') ||
+          key.startsWith('botpress') ||
+          key.includes('webchat')
+        )) {
+          sessionKeys.push(key);
+        }
+      }
+      
+      sessionKeys.forEach(key => {
+        sessionStorage.removeItem(key);
+      });
+    })();
+  </script>
+
+  <script>
+    (function() {
+      const originalError = console.error;
+      const originalWarn = console.warn;
+      
+      const suppress = (args) => {
+        const text = args.join(' ');
+        return text.includes('403 (Forbidden)') && text.includes('botpress') ||
+               text.includes('DialogContent') ||
+               text.includes('DialogTitle') ||
+               text.includes('VisuallyHidden') ||
+               text.includes('aria-describedby') ||
+               text.includes('[bp:webchat]') ||
+               text.includes('cannot start new conversation') ||
+               text.includes('client not initialized') ||
+               text.includes('client is not initialized');
+      };
+
+      console.error = function(...args) {
+        if (!suppress(args)) originalError.apply(console, args);
+      };
+      
+      console.warn = function(...args) {
+        if (!suppress(args)) originalWarn.apply(console, args);
+      };
+    })();
+  </script>
+
+  <script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js"></script>
+  <script src="https://files.bpcontent.cloud/2026/01/18/13/20260118130519-M7M8RRQH.js" defer></script>
+
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+  <app-root></app-root>
+</body>
+
+</html>

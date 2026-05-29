@@ -1,0 +1,176 @@
+<!-- src/app/rosita/components/grupos-modal/grupos-modal.component.html -->
+
+<div *ngIf="visible"
+  class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[70] flex items-center justify-center p-4"
+  (click)="onBackdropClick($event)">
+  <div class="bg-white w-full max-w-6xl rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+    (click)="$event.stopPropagation()">
+    
+    <div class="bg-[#1876d2] text-white p-6 flex justify-between items-center flex-shrink-0">
+      <h3 class="font-black uppercase tracking-widest flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+        </svg>
+        Gestión de Grupos Parroquiales
+      </h3>
+      <button
+        class="text-3xl leading-none hover:bg-white/10 rounded-full w-10 h-10 flex items-center justify-center transition-colors"
+        (click)="onClose()">×</button>
+    </div>
+
+    <div class="p-6 flex justify-between items-center bg-slate-50 border-b border-slate-200 flex-shrink-0">
+      <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">
+        Total: {{ grupos.length }} grupos disponibles
+      </p>
+      <button
+        class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-green-100 flex items-center gap-2"
+        (click)="onNewGrupo()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+        Nuevo Grupo
+      </button>
+    </div>
+
+    <div class="flex-1 overflow-auto p-6">
+      <div *ngIf="loading" class="flex flex-col items-center justify-center py-20">
+        <div class="animate-spin rounded-full h-12 w-12 border-4 border-[#1876d2] border-t-transparent"></div>
+        <p class="mt-4 text-sm font-bold text-slate-600">Cargando grupos...</p>
+      </div>
+
+      <div *ngIf="!loading && grupos.length === 0"
+        class="flex flex-col items-center justify-center py-20 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="w-16 h-16 text-slate-300 mb-4">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+        </svg>
+        <p class="text-lg font-black text-slate-400 uppercase tracking-widest">No hay grupos</p>
+        <p class="text-xs font-bold text-slate-400 mt-2">Haz clic en "Nuevo Grupo" para comenzar</p>
+      </div>
+
+      <div *ngIf="!loading && grupos.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let grupo of grupos"
+          class="bg-white border-2 border-slate-100 rounded-2xl p-6 hover:border-blue-200 hover:shadow-lg transition-all">
+
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex-1">
+              <h4 class="text-lg font-black text-slate-800 mb-1">{{ grupo.nombre_grupo }}</h4>
+              <!-- NOTA: Fechas de creación/actualización opcionales para mostrar -->
+              <p *ngIf="grupo.fecha_creacion" class="text-[10px] text-slate-400 font-medium">
+                Creado: {{ grupo.fecha_creacion | date:'dd/MM/yyyy' }}
+              </p>
+            </div>
+          </div>
+
+          <p *ngIf="grupo.descripcion" class="text-sm text-slate-600 mb-4 line-clamp-2">{{ grupo.descripcion }}</p>
+
+          <div *ngIf="grupo.horario_reunion" class="flex items-center gap-2 text-sm text-slate-600 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            {{ grupo.horario_reunion }}
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 mb-4">
+            <div class="bg-blue-50 rounded-lg p-3 text-center">
+              <div class="text-2xl font-black text-blue-600">{{ grupo.total_inscritos || 0 }}</div>
+              <div class="text-[9px] font-bold text-slate-500 uppercase mt-1">Inscritos</div>
+            </div>
+            <div class="bg-yellow-50 rounded-lg p-3 text-center">
+              <div class="text-2xl font-black text-yellow-600">{{ grupo.pendientes || 0 }}</div>
+              <div class="text-[9px] font-bold text-slate-500 uppercase mt-1">Pendientes</div>
+            </div>
+          </div>
+
+          <div class="flex gap-2">
+            <button (click)="onEditGrupo(grupo)"
+              class="flex-1 p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition-colors" title="Editar">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-5 h-5 mx-auto">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+              </svg>
+            </button>
+            <button (click)="onDeleteGrupo(grupo.id_grupo!)"
+              class="p-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-xl transition-colors" title="Eliminar">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="selectedGrupo"
+  class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[80] flex items-center justify-center p-4"
+  (click)="onFormBackdropClick($event)">
+  <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden" (click)="$event.stopPropagation()">
+    <div class="bg-[#1876d2] text-white p-6 flex justify-between items-center">
+      <h3 class="font-black uppercase tracking-widest flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+        {{ selectedGrupo.id_grupo ? 'Editar Grupo' : 'Nuevo Grupo' }}
+      </h3>
+      <button
+        class="text-3xl leading-none hover:bg-white/10 rounded-full w-10 h-10 flex items-center justify-center transition-colors"
+        (click)="onCloseForm()">×</button>
+    </div>
+
+    <div class="p-8 space-y-6 max-h-[70vh] overflow-y-auto">
+      <div>
+        <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Nombre del Grupo *</label>
+        <input type="text" [(ngModel)]="selectedGrupo.nombre_grupo" placeholder="Ej: Legión de María"
+          class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all font-medium text-slate-700">
+      </div>
+
+      <div>
+        <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Descripción</label>
+        <textarea [(ngModel)]="selectedGrupo.descripcion" rows="3" placeholder="Descripción del grupo..."
+          class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all font-medium text-slate-700 resize-none"></textarea>
+      </div>
+
+      <div>
+        <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Horario de Reunión</label>
+        <input type="text" [(ngModel)]="selectedGrupo.horario_reunion" placeholder="Ej: Miércoles 7:00 PM"
+          class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all font-medium text-slate-700">
+      </div>
+
+      <div>
+        <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Requisitos</label>
+        <textarea [(ngModel)]="selectedGrupo.requisitos" rows="3" placeholder="Requisitos para unirse..."
+          class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all font-medium text-slate-700 resize-none"></textarea>
+      </div>
+
+      <!-- NOTA: Campos de total_inscritos y pendientes son manejados automáticamente por el backend -->
+    </div>
+
+    <div class="p-6 bg-slate-50 border-t border-slate-100 flex justify-end gap-3">
+      <button (click)="onCloseForm()"
+        class="px-6 py-3 bg-white border-2 border-slate-200 text-slate-600 rounded-xl font-black uppercase tracking-widest hover:bg-slate-100 transition-all text-xs">
+        Cancelar
+      </button>
+      <button (click)="onSaveGrupo()" [disabled]="isSaveDisabled()"
+        class="px-6 py-3 bg-[#1876d2] hover:bg-blue-700 text-white rounded-xl font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-100 flex items-center gap-2 text-xs disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+        </svg>
+        Guardar
+      </button>
+    </div>
+  </div>
+</div>
