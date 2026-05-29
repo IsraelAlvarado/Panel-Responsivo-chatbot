@@ -255,18 +255,21 @@ Módulo que permite la exportación directa de bases de datos de inscritos hacia
 ```
 
 ```
-<img width="764" height="448" alt="image" src="https://github.com/user-attachments/assets/3f815443-f60b-40b3-aec2-085dbf89ea5d" />
-<img width="766" height="457" alt="image" src="https://github.com/user-attachments/assets/e38d0232-06cb-4913-b4f8-78854b7397b9" />
-<img width="680" height="264" alt="image" src="https://github.com/user-attachments/assets/7b9a227d-eeb2-4fec-a883-03506ffee3c3" />
-<img width="963" height="499" alt="image" src="https://github.com/user-attachments/assets/7dfe3245-aff3-4aa8-8332-b0309edcbe19" />
-<img width="817" height="457" alt="image" src="https://github.com/user-attachments/assets/6e25cdd6-f909-46b5-a151-7bd14dd2c7db" />
-<img width="720" height="531" alt="image" src="https://github.com/user-attachments/assets/4ef412e6-9e5e-4d58-8ddc-5b6b7122a5f4" />
-<img width="713" height="441" alt="image" src="https://github.com/user-attachments/assets/abb3675d-dbfc-4059-9335-bb1d525fec92" />
-<img width="686" height="433" alt="image" src="https://github.com/user-attachments/assets/fbc6a5d7-1f3d-4cd6-b1d9-75a5495d9a2d" />
-<img width="806" height="512" alt="image" src="https://github.com/user-attachments/assets/9389a343-9735-4519-afee-caa210acbdcf" />
-<img width="921" height="576" alt="image" src="https://github.com/user-attachments/assets/1e925d19-0edb-4627-884c-b7de739a768b" />
-<img width="974" height="558" alt="image" src="https://github.com/user-attachments/assets/da18410f-b581-4eef-b189-b984a7c3db75" />
-<img width="833" height="462" alt="image" src="https://github.com/user-attachments/assets/9a576516-77a8-492d-844a-488fb337107c" />
+
+<img width="764" height="448" alt="image" src="https://github.com/user-attachments/assets/b16f457c-799c-440a-9ea3-5f9a2ab6a86f" />
+<img width="766" height="457" alt="image" src="https://github.com/user-attachments/assets/279d05a7-1c8f-4000-974b-e1156d9e2024" />
+<img width="963" height="499" alt="image" src="https://github.com/user-attachments/assets/08a4d2e7-e9b6-4b32-a80f-73d2dd17c730" />
+<img width="680" height="264" alt="image" src="https://github.com/user-attachments/assets/80d94207-4dbf-44e9-925c-103709912916" />
+<img width="817" height="457" alt="image" src="https://github.com/user-attachments/assets/ef01fb06-f9f2-4bad-bd1a-4ebd009f8db8" />
+<img width="720" height="531" alt="image" src="https://github.com/user-attachments/assets/60453be0-6914-4f5c-af47-c9524386571e" />
+<img width="713" height="441" alt="image" src="https://github.com/user-attachments/assets/5fa956da-6c76-4ee7-9aad-c3efce1ef300" />
+<img width="686" height="433" alt="image" src="https://github.com/user-attachments/assets/54384a5b-0225-49c8-9985-01daa071af26" />
+<img width="806" height="512" alt="image" src="https://github.com/user-attachments/assets/8c9a4df5-2b85-456e-875e-be9ace8a0cc0" />
+<img width="921" height="576" alt="image" src="https://github.com/user-attachments/assets/a9df2884-6379-4bac-9a8a-65c3f2ac7272" />
+<img width="974" height="558" alt="image" src="https://github.com/user-attachments/assets/622a916e-1df5-4bbd-8bba-67df796b9b8a" />
+<img width="833" height="462" alt="image" src="https://github.com/user-attachments/assets/1487856f-cbb0-44f9-80b7-3e8d5ae1788f" />
+
+
 
 
 
