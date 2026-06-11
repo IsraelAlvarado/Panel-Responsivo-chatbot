@@ -255,6 +255,11 @@ Módulo que permite la exportación directa de bases de datos de inscritos hacia
 ```
 
 ```
+## Link Vercel
+
+https://rosita-ochre.vercel.app/
+
+## Preview
 
 <img width="764" height="448" alt="image" src="https://github.com/user-attachments/assets/b16f457c-799c-440a-9ea3-5f9a2ab6a86f" />
 <img width="766" height="457" alt="image" src="https://github.com/user-attachments/assets/279d05a7-1c8f-4000-974b-e1156d9e2024" />
